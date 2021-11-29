@@ -2,7 +2,6 @@ import * as React from "react"
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
 import ToggleButton from "@mui/material/ToggleButton"
 import Stack from "@mui/material/Stack"
-import { useRouter } from 'next/router'
 
 type Page = 'buy' | 'pool' | 'holdings'
 const NavigationContext = React.createContext({
