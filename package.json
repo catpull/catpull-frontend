@@ -1,7 +1,7 @@
 {
   "name": "catpull-fe",
   "version": "0.1.0",
-  "homepage": "https://catpull.github.io/demo",
+  "homepage": "https://0xnekodev.github.io/demo",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.6.0",
