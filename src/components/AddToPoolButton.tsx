@@ -7,10 +7,16 @@ import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Input from "@mui/material/Input";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import FormHelperText from "@mui/material/FormHelperText";
+import FormControl from "@mui/material/FormControl";
 import Switch from '@mui/material/Switch';
 import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
+import Avatar from '@mui/material/Avatar';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -23,6 +29,7 @@ import { floatToWei } from "./floatToWei";
 import { formatTokenAmount } from "./formatTokenAmount";
 import { formatPriceWithUnit } from "./formatPriceWithUnit";
 import { useCurrentState } from "./OptionType";
+import { CurrencySelector } from "./CurrencySelector";
 
 const AddToPoolButton = () => {
   const ctx = useWeb3React<Web3Provider>();
@@ -70,6 +77,7 @@ const AddToPoolButton = () => {
     Provide liqudity to {s.state.token} {s.state.type} pool
   </Button>;
 };
+
 const AmountToAddField = () => {
   const s = useCurrentState();
   const isPut = s.state.type === 'put';
@@ -77,31 +85,37 @@ const AmountToAddField = () => {
   if (data == null) {
     return null;
   }
+  const availableTokens = Object.keys(data.tokens).filter(i => i !== "stable")
   const tokenInPool = isPut ? data.stable : data.tokens[s.state.token];
   const availableBalance = s.state.tokenBalances[tokenInPool.symbol] || 0n;
 
   return <Stack direction="column" spacing={1}>
-    <Input
-      placeholder="0"
-      value={s.state.amountString}
-      onChange={e => {
-        const n = parseFloat(e.target.value);
-        if (isNaN(n)) {
-          return;
-        }
+    <FormControl variant="outlined">
+      <OutlinedInput
+        placeholder="0.0"
+        value={s.state.amountString}
+        onChange={e => {
+          const n = parseFloat(e.target.value);
+          if (isNaN(n)) {
+            return;
+          }
 
-        s.update({
-          amount: n,
-          amountString: e.target.value
-        });
-      }}
-      inputProps={{
-        style: { textAlign: 'right ' }
-      } as any}
-      startAdornment={<InputAdornment position="start">{tokenInPool.symbol.toUpperCase()}</InputAdornment>} />
-    <Typography align="right">
-      Available balance: {formatPriceWithUnit(availableBalance, tokenInPool, 2)}
-    </Typography>
+          s.update({
+            amount: n,
+            amountString: e.target.value
+          });
+        }}
+        startAdornment={
+          <InputAdornment position="start">
+            <CurrencySelector value={s.state.token.slice(1)} options={availableTokens.map(e => e.slice(1))} onChange={token => s.update({token: "w" + token as any})} />
+          </InputAdornment>
+        }
+        inputProps={{
+          style: { textAlign: 'right ' }
+        } as any}
+      />
+      <FormHelperText id="outlined-weight-helper-text">Available balance: {formatPriceWithUnit(availableBalance, tokenInPool, 2)}</FormHelperText>
+    </FormControl>
   </Stack>;
 };
 const PoolType = () => {

@@ -8,7 +8,7 @@ import { formatTokenAmount } from "./formatTokenAmount";
 
 export type OptionType = 'call' | 'put';
 const initialState = {
-  token: "weth" as "weth",
+  token: "weth" as string,
   type: 'call' as OptionType,
   strike: 0n,
   strikeString: "0",
@@ -31,11 +31,13 @@ export const GlobalState: React.FC = ({ children }) => {
   const networkData = useCurrentNetworkData();
   const ctx = useWeb3React<Web3Provider>();
   const [state, setState] = React.useState(initialState);
+  const token = state.token
   const refreshPrice = React.useCallback(async () => {
     if (ctx.account == null || ctx.library == null || networkData == null) {
       return;
     }
-    const chainLink = AggregatorV3InterfaceFactory.connect(networkData.priceOracles[state.token], await ctx.library.getSigner(
+    const chainLink = AggregatorV3InterfaceFactory.connect(
+      networkData.priceOracles[token], await ctx.library.getSigner(
       ctx.account!
     ));
     const latestRound = await chainLink.callStatic.latestRoundData();
@@ -46,7 +48,7 @@ export const GlobalState: React.FC = ({ children }) => {
       };
     });
     return BigInt(latestRound.answer.toString());
-  }, [state.token, ctx.account, networkData, ctx.library]);
+  }, [token, ctx.account, networkData, ctx.library]);
   React.useEffect(() => {
     const run = async () => {
       if (networkData == null || ctx.account == null || ctx.library == null) {
@@ -88,9 +90,11 @@ export const GlobalState: React.FC = ({ children }) => {
       });
     });
   }, [refreshPrice, networkData]);
+
   const update = React.useCallback((u) => {
     setState(s => ({ ...s, ...u }));
-  }, [refreshPrice]);
+  }, []);
+
   const refreshOptionPrice = React.useCallback(async () => { }, []);
   return <StateProvider.Provider value={{
     state,

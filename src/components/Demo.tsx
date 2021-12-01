@@ -7,8 +7,8 @@ import Container from "@mui/material/Container"
 
 import { POLLING_INTERVAL } from "../dapp/connectors";
 import { Header } from "./Header";
-import { Controls, useNavigationContext, ControlsProvider } from "./Controls";
-import { HegicCallFactory } from "../typechain";
+import { Controls  } from "./Controls";
+import { Routes, Route } from "react-router-dom";
 import { useCurrentState, GlobalState } from "./OptionType";
 import { UIBuy } from "./StrikeField";
 import { UIHoldings } from "./OptionsPageData";
@@ -19,23 +19,20 @@ export function getLibrary(provider: any): Web3Provider {
   library.pollingInterval = POLLING_INTERVAL;
   return library;
 }
-const screens = {
-  "buy": () => <UIBuy />,
-  "holdings": () => <UIHoldings />,
-  "pool": () => <UIPool />
-}
+
 const Navigation = () => {
-  const nav = useNavigationContext()
   const ctx = useWeb3React<Web3Provider>()
-  const Screen = screens[nav.page] || null
-  if (Screen == null) {
-    return null
-  }
+
   if (ctx.chainId !== 43113) {
     return null
   }
 
-  return <Screen />
+  return <Routes>
+      <Route path="buy" element={<UIBuy />}  />
+      <Route path="holdings" element={<UIHoldings />}  />
+      <Route path="pool" element={<UIPool />}  />
+      <Route index element={<UIBuy />}  />
+  </Routes>
 }
 
 const ControlsWrapper = () => {
@@ -45,16 +42,14 @@ const ControlsWrapper = () => {
 
 export default function Demo() {
   return (
-    <ControlsProvider>
-      <GlobalState>
-        <Header />
-        <Container sx={{ paddingTop: 2 }} maxWidth="sm">
-          <ControlsWrapper />
-        </Container>
-        
-          <Navigation />
-        
-      </GlobalState>
-    </ControlsProvider>
+    <GlobalState>
+      <Header />
+      <Container sx={{ paddingTop: 2 }} maxWidth="sm">
+        <ControlsWrapper />
+      </Container>
+      
+        <Navigation />
+      
+    </GlobalState>
   );
 }

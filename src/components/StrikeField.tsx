@@ -6,29 +6,33 @@ import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import Input from "@mui/material/Input";
 import Typography from "@mui/material/Typography";
 import Switch from '@mui/material/Switch';
 import Slider from '@mui/material/Slider';
 import InputAdornment from '@mui/material/InputAdornment';
+
+import OutlinedInput from "@mui/material/OutlinedInput";
+import FormHelperText from "@mui/material/FormHelperText";
+import FormControl from "@mui/material/FormControl";
 import { useCurrentNetworkData } from "../dapp/networks";
 import { Erc20Factory, FacadeFactory } from "../typechain";
 import { floatToWei } from "./floatToWei";
 import { formatTokenAmount } from "./formatTokenAmount";
 import { formatPriceWithUnit } from "./formatPriceWithUnit";
-import { useCurrentState, OptionType } from "./OptionType";
+import { useCurrentState } from "./OptionType";
+import { CurrencySelector, StableCoinSelector } from "./CurrencySelector";
 
 const StrikeField = () => {
-  const data = useCurrentNetworkData();
-  const paymentToken = data?.stable;
   const s = useCurrentState();
-  return <Stack direction="column" spacing={1}>
-    <Input
+  return  <FormControl variant="outlined">
+      <OutlinedInput
       placeholder="0.0"
       inputProps={{
         style: { textAlign: 'right ' }
       } as any}
-      startAdornment={<InputAdornment position="start">{paymentToken?.symbol?.toUpperCase()}</InputAdornment>}
+      startAdornment={<InputAdornment position="start">
+        <StableCoinSelector />
+      </InputAdornment>}
       value={s.state.strikeString}
       onChange={e => {
         const v = e.target.value;
@@ -43,10 +47,10 @@ const StrikeField = () => {
         });
       }}
       inputMode="numeric" />
-    <Typography align="right">
+    <FormHelperText>
       Price: {s.state.assetPrice == null ? "*" : formatTokenAmount(s.state.assetPrice, 8, 2)}
-    </Typography>
-  </Stack>;
+    </FormHelperText>
+  </FormControl>;
 };
 const StrikeSizes = () => {
   const s = useCurrentState();
@@ -172,24 +176,30 @@ const SubmitButton = () => {
 };
 const AmountField = () => {
   const s = useCurrentState();
-  return <Input
-    placeholder="0"
-    value={s.state.amountString}
-    onChange={e => {
-      const n = parseFloat(e.target.value);
-      if (isNaN(n)) {
-        return;
-      }
+  const data = useCurrentNetworkData()
+  const availableTokens = Object.keys(data.tokens).filter(i => i !== "stable")
+  return <FormControl variant="outlined">
+      <OutlinedInput
+      placeholder="0"
+      value={s.state.amountString}
+      onChange={e => {
+        const n = parseFloat(e.target.value);
+        if (isNaN(n)) {
+          return;
+        }
 
-      s.update({
-        amount: n,
-        amountString: e.target.value
-      });
-    }}
-    inputProps={{
-      style: { textAlign: 'right ' }
-    } as any}
-    startAdornment={<InputAdornment position="start">ETH</InputAdornment>} />;
+        s.update({
+          amount: n,
+          amountString: e.target.value
+        });
+      }}
+      inputProps={{
+        style: { textAlign: 'right ' }
+      } as any}
+      startAdornment={<InputAdornment position="start">
+      <CurrencySelector value={s.state.token.slice(1)} options={availableTokens.map(e => e.slice(1))} onChange={token => s.update({token: "w" + token as any})} />
+    </InputAdornment>} />
+  </FormControl>;
 };
 const ExpirySlider = () => {
   const s = useCurrentState();
@@ -278,20 +288,20 @@ const Premium = () => {
   if (data == null || paymentToken == null) {
     return null;
   }
-  return <Stack direction="column" spacing={1}>
-    <Input
+  return <FormControl variant="outlined">
+      <OutlinedInput
       placeholder="0.0"
       readOnly={true}
       inputProps={{
         style: { textAlign: 'right ' }
       } as any}
-      startAdornment={<InputAdornment position="start">{paymentToken?.symbol.toUpperCase() ?? '*'}</InputAdornment>}
+      startAdornment={<StableCoinSelector />}
       value={s.state.optionPremium == null ? '*'
         : formatTokenAmount(s.state.optionPremium, paymentToken?.decimals ?? 2, 2)} />
-    <Typography align="right">
+    <FormHelperText>
       Available balance: {formatPriceWithUnit(availableBalance, paymentToken, 2)}
-    </Typography>
-  </Stack>;
+    </FormHelperText>
+  </FormControl>;
 };
 export const UIBuy = () => {
   return <Container maxWidth="sm">
