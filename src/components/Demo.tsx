@@ -1,18 +1,19 @@
-import * as React from "react"
-import { Web3Provider } from "@ethersproject/providers";
-import { useWeb3React } from "@web3-react/core";
-
-import Container from "@mui/material/Container"
-
-
 import { POLLING_INTERVAL } from "../dapp/connectors";
+import { GlobalState } from "./GlobalState";
 import { Header } from "./Header";
-import { Controls  } from "./Controls";
+import { UIBuy } from "./UIBuy";
+import { UILiquidity } from "./UILiquidity";
+import { UIPool } from "./UIPool";
+import { UIHoldings } from "./UiHoldings";
+import { Web3Provider } from "@ethersproject/providers";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import { useWeb3React } from "@web3-react/core";
+import * as React from "react";
 import { Routes, Route } from "react-router-dom";
-import { useCurrentState, GlobalState } from "./OptionType";
-import { UIBuy } from "./StrikeField";
-import { UIHoldings } from "./OptionsPageData";
-import { UIPool } from "./AddToPoolButton";
 
 export function getLibrary(provider: any): Web3Provider {
   const library = new Web3Provider(provider);
@@ -20,36 +21,60 @@ export function getLibrary(provider: any): Web3Provider {
   return library;
 }
 
-const Navigation = () => {
-  const ctx = useWeb3React<Web3Provider>()
+const SwitchToDevNet = () => {
+  return (
+    <Container sx={{ paddingTop: 2 }} maxWidth="sm">
+      <Paper sx={{ padding: 3 }}>
+        <Stack direction="column" spacing={3}>
+          <Typography>Sorry, this demo is only available on the Avalance Fuji network</Typography>
+        </Stack>
+      </Paper>
+    </Container>
+  );
+};
 
-  if (ctx.chainId !== 43113) {
-    return null
+const NoPoolsFoundForThisNetwork = () => {
+  return (
+    <Container sx={{ paddingTop: 2 }} maxWidth="sm">
+      <Paper sx={{ padding: 3 }}>
+        <Stack direction="column" spacing={3}>
+          <Typography>Sorry, this dappp only works on</Typography>
+        </Stack>
+      </Paper>
+    </Container>
+  );
+};
+
+const Navigation = () => {
+  const ctx = useWeb3React<Web3Provider>();
+
+  if (ctx.chainId === 43114) {
+    return <SwitchToDevNet />;
   }
 
-  return <Routes>
-      <Route path="buy" element={<UIBuy />}  />
-      <Route path="holdings" element={<UIHoldings />}  />
-      <Route path="pool" element={<UIPool />}  />
-      <Route index element={<UIBuy />}  />
-  </Routes>
-}
+  if (ctx.chainId === 43113) {
+    return (
+      <Routes>
+        <Route path="buy" element={<UIBuy />} />
+        <Route path="holdings" element={<UIHoldings />} />
+        <Route path="pool" element={<UIPool />} />
+        <Route path="liquidity" element={<UILiquidity />} />
+        <Route index element={<UIBuy />} />
+      </Routes>
+    );
+  }
 
-const ControlsWrapper = () => {
-  const s = useCurrentState()
-  return <Controls onUpdate={() => s.refreshPrice()} />
-}
+  return <NoPoolsFoundForThisNetwork />;
+};
 
 export default function Demo() {
   return (
     <GlobalState>
       <Header />
-      <Container sx={{ paddingTop: 2 }} maxWidth="sm">
-        <ControlsWrapper />
-      </Container>
-      
+
+      <Box sx={{ marginTop: 5 }}>
         <Navigation />
-      
+      </Box>
     </GlobalState>
   );
 }

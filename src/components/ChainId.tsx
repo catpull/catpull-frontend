@@ -1,9 +1,8 @@
+import { useNetworkType } from "../dapp/networks";
 import { Typography } from "@mui/material";
-import { useNetworkType } from "../dapp/networks"
-
 
 export function ChainId() {
-  const network =  useNetworkType()
+  const network = useNetworkType();
 
   return (
     <>
@@ -11,7 +10,6 @@ export function ChainId() {
         <span>Network:&nbsp;</span>
         {network == null ? <span>Not connected</span> : network}
       </Typography>
-
     </>
   );
 }

@@ -6,6 +6,6 @@ export function formatTokenAmount(amount: bigint, decimals: number, outDigits: n
   const scale = decimalToScale(decimals);
   const integer = amount / scale;
   const fractional = amount - integer * scale;
-  const digits = fractional.toString().padStart(decimals, '0').slice(0, outDigits);
-  return sign + integer.toString() + '.' + digits;
+  const digits = fractional.toString().padStart(decimals, "0").slice(0, outDigits);
+  return sign + integer.toString() + "." + digits;
 }
