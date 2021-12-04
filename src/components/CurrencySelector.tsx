@@ -43,7 +43,7 @@ export function CurrencySelector(props: CurrencySelectorProps) {
           >
             <ListItemIcon>
               <Icon name={choice} size={25} />
-            </ListItemIcon>{" "}
+            </ListItemIcon>
             {choice.toUpperCase()}
           </MenuItem>
         ))}
@@ -52,4 +52,4 @@ export function CurrencySelector(props: CurrencySelectorProps) {
   );
 }
 
-export const StableCoinSelector = () => <CurrencySelector value="usdc" options={["usdc"]} onChange={() => {}} />;
+export const StableCoinSelector = () => <CurrencySelector value="mim" options={["mim"]} onChange={() => {}} />;

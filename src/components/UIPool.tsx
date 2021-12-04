@@ -1,12 +1,12 @@
 import { useCurrentNetworkData, Token } from "../dapp/networks";
 import { Erc20Factory, HegicPutFactory } from "../typechain";
-import { CryptoTabs } from "./CryptoTabs";
-import { CurrencySelector } from "./CurrencySelector";
+import { CurrencySelector, StableCoinSelector } from "./CurrencySelector";
 import { useCurrentState } from "./GlobalState";
-import { OptionType } from "./OptionType";
+import { PoolTabs } from "./PoolTabs";
 import { floatToWei } from "./floatToWei";
 import { formatPriceWithUnit } from "./formatPriceWithUnit";
 import { Web3Provider } from "@ethersproject/providers";
+import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -151,7 +151,11 @@ const AmountToAddField = () => {
           }}
           startAdornment={
             <InputAdornment position="start">
-              <CurrencySelector value={s.state.token.slice(1)} options={availableTokens.map(e => e.slice(1))} onChange={token => s.update({ token: ("w" + token) as any })} />
+              {isPut ? (
+                <StableCoinSelector />
+              ) : (
+                <CurrencySelector value={s.state.token.slice(1)} options={availableTokens.map(e => e.slice(1))} onChange={token => s.update({ token: ("w" + token) as any })} />
+              )}
             </InputAdornment>
           }
           inputProps={
@@ -165,14 +169,25 @@ const AmountToAddField = () => {
     </Stack>
   );
 };
+
+const Explanation = () => {
+  const s = useCurrentState();
+
+  return (
+    <Typography sx={{ marginBottom: 3 }}>
+      You are about to start selling {s.state.token.toUpperCase().slice(1)} {s.state.type.toUpperCase()} options. Please make sure you understand the risks associated with
+      liquidity provision before continuing.
+    </Typography>
+  );
+};
 export const UIPool = () => {
   return (
     <Container maxWidth="sm">
-      <Paper sx={{ paddingLeft: 3, paddingRight: 3, paddingBottom: 3 }} variant="outlined">
-        <CryptoTabs />
-        <Box component="form" noValidate>
+      <Paper sx={{ paddingBottom: 3 }} variant="outlined">
+        <PoolTabs />
+        <Box sx={{ marginTop: 3, paddingLeft: 3, paddingRight: 3 }} component="form" noValidate>
+          <Explanation />
           <Stack direction="column" spacing={4}>
-            <OptionType />
             <AmountToAddField />
             <AddToPoolButton />
           </Stack>

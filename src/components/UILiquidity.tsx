@@ -1,6 +1,7 @@
 import { useCurrentNetworkData } from "../dapp/networks";
 import { UiProviderFactory, UiProvider } from "../typechain";
 import { useCurrentState } from "./GlobalState";
+import { PoolTabs } from "./PoolTabs";
 import { formatTokenAmount } from "./formatTokenAmount";
 import { Web3Provider } from "@ethersproject/providers";
 import Button from "@mui/material/Button";
@@ -57,13 +58,9 @@ export const UILiquidity = () => {
   }
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="md">
       <Paper variant="outlined">
-        <Toolbar>
-          <Typography sx={{ flex: "1 1 100%" }} variant="h6" id="tableTitle" component="div">
-            Current liquidity provided to pools
-          </Typography>
-        </Toolbar>
+        <PoolTabs />
         <TableContainer>
           <Table aria-label="simple table">
             <TableHead>
