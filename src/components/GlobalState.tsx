@@ -8,7 +8,8 @@ import * as React from "react";
 
 export type OptionType = "call" | "put";
 const initialState = {
-  token: "weth" as string,
+  nativeTokenBalance: 0n as bigint,
+  token: "wavax" as string,
   type: "call" as OptionType,
   strike: 0n,
   strikeString: "0",
@@ -57,6 +58,11 @@ export const GlobalState: React.FC = ({ children }) => {
       return;
     }
     const signer = await ctx.library.getSigner(ctx.account);
+    const balance = await signer.getBalance();
+    setState(s => ({
+      ...s,
+      nativeTokenBalance: balance.toBigInt(),
+    }));
     const tokens = [networkData.stable];
     tokens.push(...Object.keys(networkData.tokens).map(k => (networkData.tokens as any)[k]));
     tokens.forEach(async tok => {

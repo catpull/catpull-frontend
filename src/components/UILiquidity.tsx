@@ -79,8 +79,7 @@ export const UILiquidity = () => {
                 return (
                   <TableRow key={row.trancheId.toString()}>
                     <TableCell align="right">
-                      {formatTokenAmount(row.amount.toBigInt(), currency.decimals, Math.ceil(currency.decimals / 4))}{" "}
-                      {networkData.tokensLookup[row.asset].symbol.slice(1).toUpperCase()}
+                      {formatTokenAmount(row.amount.toBigInt(), currency.decimals, Math.ceil(currency.decimals / 4))} {networkData.tokensLookup[row.asset].symbol.toUpperCase()}
                     </TableCell>
                     <TableCell align="right">{row.state === 1 ? daysStaked.toFixed(2) + " days" : "-"}</TableCell>
                     <TableCell align="right">{formatTokenAmount(row.pnl.toBigInt(), currency.decimals, Math.ceil(currency.decimals / 4))}</TableCell>

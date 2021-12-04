@@ -36,7 +36,6 @@ interface FacadeInterface extends ethers.utils.Interface {
     "renounceOwnership()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "unlockAll(address,uint256[])": FunctionFragment;
-    "versionRecipient()": FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: "WETH", values?: undefined): string;
@@ -86,10 +85,6 @@ interface FacadeInterface extends ethers.utils.Interface {
     functionFragment: "unlockAll",
     values: [string, BigNumberish[]]
   ): string;
-  encodeFunctionData(
-    functionFragment: "versionRecipient",
-    values?: undefined
-  ): string;
 
   decodeFunctionResult(functionFragment: "WETH", data: BytesLike): Result;
   decodeFunctionResult(
@@ -128,10 +123,6 @@ interface FacadeInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "unlockAll", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "versionRecipient",
-    data: BytesLike
-  ): Result;
 
   events: {
     "OwnershipTransferred(address,address)": EventFragment;
@@ -329,14 +320,6 @@ export class Facade extends Contract {
       optionIDs: BigNumberish[],
       overrides?: Overrides
     ): Promise<ContractTransaction>;
-
-    versionRecipient(overrides?: CallOverrides): Promise<{
-      0: string;
-    }>;
-
-    "versionRecipient()"(overrides?: CallOverrides): Promise<{
-      0: string;
-    }>;
   };
 
   WETH(overrides?: CallOverrides): Promise<string>;
@@ -499,10 +482,6 @@ export class Facade extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
-  versionRecipient(overrides?: CallOverrides): Promise<string>;
-
-  "versionRecipient()"(overrides?: CallOverrides): Promise<string>;
-
   callStatic: {
     WETH(overrides?: CallOverrides): Promise<string>;
 
@@ -657,10 +636,6 @@ export class Facade extends Contract {
       optionIDs: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
-
-    versionRecipient(overrides?: CallOverrides): Promise<string>;
-
-    "versionRecipient()"(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {
@@ -792,10 +767,6 @@ export class Facade extends Contract {
       optionIDs: BigNumberish[],
       overrides?: Overrides
     ): Promise<BigNumber>;
-
-    versionRecipient(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "versionRecipient()"(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -927,12 +898,6 @@ export class Facade extends Contract {
       pool: string,
       optionIDs: BigNumberish[],
       overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    versionRecipient(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "versionRecipient()"(
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

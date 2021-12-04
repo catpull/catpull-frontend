@@ -13,6 +13,16 @@ ReactDOM.render(
 a:visited { text-decoration: none; }
 a:hover { text-decoration: none; }
 a:active { text-decoration: none; }
+html {
+  height: 100vh;
+}
+body, #root {
+  width: 100%;
+  height: 100%;
+}
+ #root {
+   background-color: rgb(212, 205, 198);
+ }
 `}
     />
     <SnackbarProvider

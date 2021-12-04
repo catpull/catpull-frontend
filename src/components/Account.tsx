@@ -1,28 +1,48 @@
 /* eslint-disable no-nested-ternary */
 import { injected, walletconnect } from "../dapp/connectors";
-import Typography from "@mui/material/Typography";
+import { useOnValidNetwork } from "../dapp/networks";
+import { Button } from "@mui/material";
 import { useWeb3React } from "@web3-react/core";
 
 export function Account() {
-  const { connector, account, deactivate } = useWeb3React();
+  const validNetwork = useOnValidNetwork();
+  const { connector, activate, account, deactivate } = useWeb3React();
 
   const connected = (connection: typeof injected | typeof walletconnect) => connection === connector;
 
+  if (!validNetwork) {
+    return (
+      <Button disabled={true} color="error">
+        Wrong network
+      </Button>
+    );
+  }
+  if (account == null) {
+    return (
+      <Button
+        variant="contained"
+        onClick={async () => {
+          activate(injected);
+        }}
+        color="secondary"
+      >
+        Connect
+      </Button>
+    );
+  }
   return (
-    <div
+    <Button
+      variant="contained"
       onClick={async () => {
         if (connected(walletconnect)) {
           (connector as any).close();
         }
         deactivate();
       }}
-      className="btn btn-ghost btn-sm rounded-btn"
+      color="secondary"
     >
-      <Typography>
-        Account: &nbsp;
-        {account == null ? "Disconnceted" : account ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}` : ""}
-      </Typography>
-    </div>
+      Disconnect
+    </Button>
   );
 }
 

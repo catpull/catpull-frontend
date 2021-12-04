@@ -5,6 +5,8 @@ import { UIBuy } from "./UIBuy";
 import { UILiquidity } from "./UILiquidity";
 import { UIPool } from "./UIPool";
 import { UIHoldings } from "./UiHoldings";
+import cat from "./assets/cat.png";
+import tiger from "./assets/tiger.png";
 import { Web3Provider } from "@ethersproject/providers";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -14,6 +16,19 @@ import Typography from "@mui/material/Typography";
 import { useWeb3React } from "@web3-react/core";
 import * as React from "react";
 import { Routes, Route } from "react-router-dom";
+
+const BackgroundElements = () => {
+  return (
+    <>
+      <div style={{ position: "absolute", left: 0, top: "50%" }}>
+        <img src={cat} />
+      </div>
+      <div style={{ position: "absolute", right: 0, top: "50%" }}>
+        <img src={tiger} />
+      </div>
+    </>
+  );
+};
 
 export function getLibrary(provider: any): Web3Provider {
   const library = new Web3Provider(provider);
@@ -47,12 +62,13 @@ const NoPoolsFoundForThisNetwork = () => {
 
 const Navigation = () => {
   const ctx = useWeb3React<Web3Provider>();
+  console.log(ctx.chainId);
 
   if (ctx.chainId === 43114) {
     return <SwitchToDevNet />;
   }
 
-  if (ctx.chainId === 43113) {
+  if (ctx.chainId === 43113 || ctx.chainId === 31337) {
     return (
       <Routes>
         <Route path="buy" element={<UIBuy />} />
@@ -70,6 +86,7 @@ const Navigation = () => {
 export default function Demo() {
   return (
     <GlobalState>
+      <BackgroundElements />
       <Header />
 
       <Box sx={{ marginTop: 5 }}>

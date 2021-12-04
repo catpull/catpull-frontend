@@ -215,9 +215,9 @@ const SubmitButton = () => {
       </Button>
     );
   }
-
+  console.log(strike);
   return (
-    <Button disabled={availableBalance < premium} onClick={submit} variant="contained" color={s.state.type === "call" ? "success" : "error"}>
+    <Button disabled={strike == null || availableBalance < premium} onClick={submit} variant="contained" color={s.state.type === "call" ? "success" : "error"}>
       Create {s.state.type}
     </Button>
   );
@@ -322,9 +322,8 @@ const Premium = () => {
       const path = type === "put" ? [paymentToken.address] : [paymentToken.address, tokenInPool.address];
 
       try {
+        console.log(strike);
         const price = await facadeInst.callStatic.getOptionPrice(pool, expiry * SEC_IN_A_DAY, amount_, strike, path);
-        console.log(price, pool, expiry * SEC_IN_A_DAY, amount_, strike, path);
-        console.log(price.total.toBigInt());
         update({
           optionPremium: price.total.toBigInt(),
         });

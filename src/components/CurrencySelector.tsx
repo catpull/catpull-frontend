@@ -1,9 +1,9 @@
+import { CryptoIcon } from "./CryptoIcon";
 import Chip from "@mui/material/Chip";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import * as React from "react";
-import Icon from "react-crypto-icons";
 
 interface CurrencySelectorProps {
   options: string[];
@@ -23,7 +23,7 @@ export function CurrencySelector(props: CurrencySelectorProps) {
 
   return (
     <div>
-      <Chip onClick={handleClick} icon={<Icon name={props.value} size={25} />} label={props.value.toUpperCase()} variant="outlined" />
+      <Chip onClick={handleClick} icon={<CryptoIcon name={props.value} size={25} />} label={props.value.toUpperCase()} variant="outlined" />
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
@@ -42,7 +42,7 @@ export function CurrencySelector(props: CurrencySelectorProps) {
             }}
           >
             <ListItemIcon>
-              <Icon name={choice} size={25} />
+              <CryptoIcon name={choice} size={25} />
             </ListItemIcon>
             {choice.toUpperCase()}
           </MenuItem>

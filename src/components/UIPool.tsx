@@ -1,5 +1,5 @@
 import { useCurrentNetworkData, Token } from "../dapp/networks";
-import { Erc20Factory, HegicPutFactory } from "../typechain";
+import { Erc20Factory, HegicPutFactory, FacadeFactory } from "../typechain";
 import { CurrencySelector, StableCoinSelector } from "./CurrencySelector";
 import { useCurrentState } from "./GlobalState";
 import { PoolTabs } from "./PoolTabs";
@@ -28,13 +28,14 @@ const AddToPoolButton = () => {
   const data = useCurrentNetworkData();
   const [addingLiquidty, setAddingLiquidty] = React.useState(false);
   const isPut = s.state.type === "put";
-  const [isApproved, setIsApproved] = React.useState(false);
+  const tokenInPool = isPut ? data?.stable : (data?.tokens[s.state.token] as Token);
+  const [isApproved, setIsApproved] = React.useState(tokenInPool?.wrappedNative);
   const [isApproving, setIsApproving] = React.useState(false);
   const pool = data?.pools[s.state.token][s.state.type] as string | undefined;
-  const tokenInPool = isPut ? data?.stable : (data?.tokens[s.state.token] as Token);
+  const facade = data?.facade;
 
   React.useEffect(() => {
-    if (pool == null || tokenInPool == null) {
+    if (pool == null || tokenInPool == null || tokenInPool.wrappedNative) {
       return;
     }
     const run = async () => {
@@ -90,15 +91,42 @@ const AddToPoolButton = () => {
       await tx.wait(1);
     }
 
-    const r = await poolInst.provideFrom(signer._address, amount, "0");
-    noti.enqueueSnackbar("Providing liquidity");
-    await r.wait(1);
-    noti.enqueueSnackbar("Liquidity provided");
+    try {
+      const r = await poolInst.provideFrom(signer._address, amount, "0");
+      noti.enqueueSnackbar("Providing liquidity");
+      await r.wait(1);
+      noti.enqueueSnackbar("Liquidity provided");
+    } catch (e) {
+      noti.enqueueSnackbar("Failed to provide liquidity");
+    }
 
     setAddingLiquidty(false);
   }, [noti, ctx, data, s.state.amount, tokenInPool, pool]);
 
-  if (!isApproved) {
+  const addToPoolNative = React.useCallback(async () => {
+    if (ctx.library == null || ctx.account == null || tokenInPool == null || data == null) {
+      return null;
+    }
+    setAddingLiquidty(true);
+    const signer = await ctx.library.getSigner(ctx.account);
+    const facadeInst = FacadeFactory.connect(facade, signer);
+
+    const amount = floatToWei(s.state.amount, tokenInPool);
+
+    try {
+      const r = await facadeInst.provideEthToPool(pool, 0, {
+        value: amount,
+      });
+      noti.enqueueSnackbar("Providing liquidity");
+      await r.wait(1);
+      noti.enqueueSnackbar("Liquidity provided");
+    } catch (e) {
+      noti.enqueueSnackbar("Failed to provide liquidity");
+    }
+    setAddingLiquidty(false);
+  }, [noti, ctx, facade, data, s.state.amount, tokenInPool, pool]);
+
+  if (!isApproved && tokenInPool?.wrappedNative !== true) {
     return (
       <Button disabled={isApproving} onClick={approve} variant="contained" color="primary">
         Approve {tokenInPool.symbol.toUpperCase()}
@@ -113,7 +141,7 @@ const AddToPoolButton = () => {
     );
   }
   return (
-    <Button onClick={addToPool} variant="contained" color={s.state.type === "call" ? "success" : "error"}>
+    <Button onClick={tokenInPool?.wrappedNative !== true ? addToPool : addToPoolNative} variant="contained" color={s.state.type === "call" ? "success" : "error"}>
       Provide liqudity to {s.state.token} {s.state.type} pool
     </Button>
   );
@@ -126,9 +154,11 @@ const AmountToAddField = () => {
   if (data == null) {
     return null;
   }
-  const availableTokens = Object.keys(data.tokens).filter(i => i !== "stable");
   const tokenInPool = isPut ? data.stable : data.tokens[s.state.token];
-  const availableBalance = s.state.tokenBalances[tokenInPool.symbol] || 0n;
+  let availableBalance = s.state.tokenBalances[tokenInPool.symbol] || 0n;
+  if (tokenInPool.wrappedNative) {
+    availableBalance = s.state.nativeTokenBalance;
+  }
 
   return (
     <Stack direction="column" spacing={1}>
@@ -154,7 +184,7 @@ const AmountToAddField = () => {
               {isPut ? (
                 <StableCoinSelector />
               ) : (
-                <CurrencySelector value={s.state.token.slice(1)} options={availableTokens.map(e => e.slice(1))} onChange={token => s.update({ token: ("w" + token) as any })} />
+                <CurrencySelector value={s.state.token.slice(1)} options={[tokenInPool.symbol.slice(1)]} onChange={token => s.update({ token: ("w" + token) as any })} />
               )}
             </InputAdornment>
           }
@@ -182,7 +212,7 @@ const Explanation = () => {
 };
 export const UIPool = () => {
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="md">
       <Paper sx={{ paddingBottom: 3 }} variant="outlined">
         <PoolTabs />
         <Box sx={{ marginTop: 3, paddingLeft: 3, paddingRight: 3 }} component="form" noValidate>

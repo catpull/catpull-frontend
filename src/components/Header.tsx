@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { useOnTestnet, useCurrentNetworkData, networks } from "../dapp/networks";
-import { Erc20MockFactory, PriceProviderMockFactory } from "../typechain";
+import { Erc20MockFactory, PriceProviderMockFactory, ExerciserV1Factory, ExpirerV1Factory } from "../typechain";
 import { Account } from "./Account";
 import { ChainId } from "./ChainId";
 import { Controls } from "./Controls";
@@ -12,7 +12,7 @@ import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useWeb3React } from "@web3-react/core";
-import { utils } from "ethers";
+import { utils, BigNumber } from "ethers";
 import { useSnackbar } from "notistack";
 
 const ControlsWrapper = () => {
@@ -28,16 +28,33 @@ const ControlsWrapper = () => {
 };
 
 const TestnetControls = () => {
+  const s = useCurrentState();
   const noti = useSnackbar();
   const curNetworkData = useCurrentNetworkData();
   const ctx = useWeb3React<Web3Provider>();
-  const mkMinter = (addr: string, amount: string, decimals: string) => async () => {
-    const r = await Erc20MockFactory.connect(addr, await ctx.library.getSigner(ctx.account)).mint(utils.parseUnits(amount, decimals));
+  const curToken = curNetworkData.tokens[s.state.token];
+
+  const runExcerciser = async (addr: string) => {
+    const expirerV1 = ExerciserV1Factory.connect(addr, await ctx.library.getSigner(ctx.account));
+    const pages = (await expirerV1.numberOfPages()).toNumber();
+    const options: BigNumber[] = [];
+    for (let page = 0; page < pages; page++) {
+      const { len, out } = await expirerV1.callStatic.search(page);
+      options.push(...out.slice(0, len.toNumber()));
+    }
+    const r = await expirerV1.run(options);
+    noti.enqueueSnackbar("Running");
+    await r.wait(1);
+    noti.enqueueSnackbar("Done");
+  };
+  const mkMinter = (addr: string, amount: number, decimals: number) => async () => {
+    const r = await Erc20MockFactory.connect(addr, await ctx.library.getSigner(ctx.account)).mint(utils.parseUnits(amount.toString(), decimals));
     noti.enqueueSnackbar("Minting..");
     await r.wait(1);
     noti.enqueueSnackbar("Tokens minted!");
+    s.refreshBalances();
   };
-  const mkPriceAdvancer = (amount: bigint, token: "weth") => {
+  const mkPriceAdvancer = (amount: bigint, token: string) => {
     return async () => {
       const priceOracleAddr = curNetworkData.priceOracles[token];
       const priceProvider = await PriceProviderMockFactory.connect(priceOracleAddr, await ctx.library.getSigner(ctx.account));
@@ -46,6 +63,7 @@ const TestnetControls = () => {
       const newPrice = answer.toBigInt() + (answer.toBigInt() * amount) / 100n;
       const r = await priceProvider.setPrice(newPrice);
       noti.enqueueSnackbar("Changing " + token + " price");
+      s.refreshOptionPrice();
       await r.wait(1);
       noti.enqueueSnackbar("Price updated");
     };
@@ -54,17 +72,35 @@ const TestnetControls = () => {
   return (
     <div style={{ position: "absolute", left: 0, bottom: 16 }}>
       <Stack sx={{ marginLeft: 3 }} direction="row" spacing={2}>
-        <Button onClick={mkMinter(networks.testnet.stable.address, "50000", "6")} size="small" variant="contained" color="secondary">
-          Mint 50000 USDC
+        <Button onClick={mkMinter(curNetworkData.stable.address, curNetworkData.stable.mintSize, curNetworkData.stable.decimals)} size="small" variant="contained">
+          Mint {curNetworkData.stable.mintSize} {curNetworkData.stable.symbol}
         </Button>
-        <Button onClick={mkMinter(networks.testnet.tokens.weth.address, "10", "18")} size="small" variant="contained" color="secondary">
-          Mint 10 WETH
+        <Button onClick={mkMinter(curToken.address, curToken.mintSize, curToken.decimals)} size="small" variant="contained">
+          Mint {curToken.mintSize} {curToken.symbol}
         </Button>
-        <Button onClick={mkPriceAdvancer(5n, "weth")} size="small" variant="contained" color="secondary">
-          + 5% eth price
+        <Button onClick={mkPriceAdvancer(5n, s.state.token)} size="small" variant="contained">
+          + 5% {s.state.token} price
         </Button>
-        <Button onClick={mkPriceAdvancer(-5n, "weth")} size="small" variant="contained" color="secondary">
-          - 5% eth price
+        <Button onClick={mkPriceAdvancer(-5n, s.state.token)} size="small" variant="contained">
+          - 5% {s.state.token} price
+        </Button>
+        <Button
+          onClick={async () => {
+            await runExcerciser(curNetworkData.keepers.excercise);
+          }}
+          size="small"
+          variant="contained"
+        >
+          Run exercise keeper
+        </Button>
+        <Button
+          onClick={async () => {
+            await runExcerciser(curNetworkData.keepers.expiration);
+          }}
+          size="small"
+          variant="contained"
+        >
+          Run expiration keeper
         </Button>
       </Stack>
     </div>
@@ -72,18 +108,12 @@ const TestnetControls = () => {
 };
 
 export function Header() {
-  const { active, error } = useWeb3React();
   const isTestNet = useOnTestnet();
 
   return (
     <>
       <Box sx={{ width: "100%", height: 50, position: "relative" }}>
         <Toolbar variant="dense">
-          <Box sx={{ display: "flex", flexDirection: "row" }}>
-            <Typography>{active ? "🟢" : error ? "🔴" : "🟠"}&nbsp;</Typography>
-            <ChainId />
-          </Box>
-
           <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "row" }}></Box>
           <Account />
         </Toolbar>
