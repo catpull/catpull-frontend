@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/catpull-frontend/static/js/main.ec8a3af2.chunk.js",
-    "main.js.map": "/catpull-frontend/static/js/main.ec8a3af2.chunk.js.map",
-    "runtime-main.js": "/catpull-frontend/static/js/runtime-main.d877de04.js",
-    "runtime-main.js.map": "/catpull-frontend/static/js/runtime-main.d877de04.js.map",
-    "static/js/2.d365458e.chunk.js": "/catpull-frontend/static/js/2.d365458e.chunk.js",
-    "static/js/2.d365458e.chunk.js.map": "/catpull-frontend/static/js/2.d365458e.chunk.js.map",
-    "static/js/3.a82d01f6.chunk.js": "/catpull-frontend/static/js/3.a82d01f6.chunk.js",
-    "static/js/3.a82d01f6.chunk.js.map": "/catpull-frontend/static/js/3.a82d01f6.chunk.js.map",
+    "main.js": "/catpull-frontend/static/js/main.da77d025.chunk.js",
+    "main.js.map": "/catpull-frontend/static/js/main.da77d025.chunk.js.map",
+    "runtime-main.js": "/catpull-frontend/static/js/runtime-main.72d0126a.js",
+    "runtime-main.js.map": "/catpull-frontend/static/js/runtime-main.72d0126a.js.map",
+    "static/js/2.c007b94a.chunk.js": "/catpull-frontend/static/js/2.c007b94a.chunk.js",
+    "static/js/2.c007b94a.chunk.js.map": "/catpull-frontend/static/js/2.c007b94a.chunk.js.map",
+    "static/js/3.450dcfad.chunk.js": "/catpull-frontend/static/js/3.450dcfad.chunk.js",
+    "static/js/3.450dcfad.chunk.js.map": "/catpull-frontend/static/js/3.450dcfad.chunk.js.map",
     "static/js/4.c123c808.chunk.js": "/catpull-frontend/static/js/4.c123c808.chunk.js",
     "static/js/4.c123c808.chunk.js.map": "/catpull-frontend/static/js/4.c123c808.chunk.js.map",
     "static/js/5.b7c86b3a.chunk.js": "/catpull-frontend/static/js/5.b7c86b3a.chunk.js",
@@ -1199,12 +1199,14 @@
     "static/js/598.69113c51.chunk.js": "/catpull-frontend/static/js/598.69113c51.chunk.js",
     "static/js/598.69113c51.chunk.js.map": "/catpull-frontend/static/js/598.69113c51.chunk.js.map",
     "index.html": "/catpull-frontend/index.html",
-    "static/js/2.d365458e.chunk.js.LICENSE.txt": "/catpull-frontend/static/js/2.d365458e.chunk.js.LICENSE.txt",
-    "static/js/3.a82d01f6.chunk.js.LICENSE.txt": "/catpull-frontend/static/js/3.a82d01f6.chunk.js.LICENSE.txt"
+    "static/js/2.c007b94a.chunk.js.LICENSE.txt": "/catpull-frontend/static/js/2.c007b94a.chunk.js.LICENSE.txt",
+    "static/js/3.450dcfad.chunk.js.LICENSE.txt": "/catpull-frontend/static/js/3.450dcfad.chunk.js.LICENSE.txt",
+    "static/media/cat.d9f51e96.png": "/catpull-frontend/static/media/cat.d9f51e96.png",
+    "static/media/tiger.d60e0b15.png": "/catpull-frontend/static/media/tiger.d60e0b15.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.d877de04.js",
-    "static/js/2.d365458e.chunk.js",
-    "static/js/main.ec8a3af2.chunk.js"
+    "static/js/runtime-main.72d0126a.js",
+    "static/js/2.c007b94a.chunk.js",
+    "static/js/main.da77d025.chunk.js"
   ]
 }
