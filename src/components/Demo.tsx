@@ -20,10 +20,10 @@ import { Landing } from "./Landing";
 const BackgroundElements = () => {
   return (
     <>
-      <div style={{ position: "absolute", left: 0, transform: "translateY(-50%)", top: "50%" }}>
+      <div style={{ position: "absolute", left: 0, zIndex: 0, transform: "translateY(-50%)", top: "50%" }}>
         <img src={cat} />
       </div>
-      <div style={{ position: "absolute", right: 0, transform: "translateY(-50%)", top: "50%" }}>
+      <div style={{ position: "absolute", right: 0, zIndex: 0, transform: "translateY(-50%)", top: "50%" }}>
         <img src={tiger} />
       </div>
     </>
@@ -93,7 +93,7 @@ export default function Demo() {
             <BackgroundElements />
             <Header />
 
-            <Box sx={{ marginTop: 5 }}>
+            <Box sx={{ marginTop: 5, position: "relative", zIndex: 2 }}>
               <Navigation />
             </Box>
           </GlobalState>
