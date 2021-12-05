@@ -1,7 +1,5 @@
 import { Token } from "../dapp/networks";
-
+import { utils } from "ethers";
 export function floatToWei(amount: number, token: Token) {
-  const [integer, fractional = ""] = Math.abs(amount).toFixed(token.decimals).split(".");
-
-  return BigInt(Math.sign(amount)) * BigInt(integer + fractional);
+  return utils.parseUnits(amount.toString(), token.decimals).toBigInt();
 }

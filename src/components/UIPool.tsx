@@ -8,6 +8,7 @@ import { formatPriceWithUnit } from "./formatPriceWithUnit";
 import { Web3Provider } from "@ethersproject/providers";
 import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
+import * as ethers from "ethers";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import FormControl from "@mui/material/FormControl";
@@ -33,6 +34,11 @@ const AddToPoolButton = () => {
   const [isApproving, setIsApproving] = React.useState(false);
   const pool = data?.pools[s.state.token][s.state.type] as string | undefined;
   const facade = data?.facade;
+  let availableBalance = s.state.tokenBalances[tokenInPool.symbol] || 0n;
+  if (tokenInPool.wrappedNative) {
+    availableBalance = s.state.nativeTokenBalance;
+  }
+  const amountScaled = ethers.utils.parseUnits(s.state.amount.toString(), tokenInPool.decimals).toBigInt();
 
   React.useEffect(() => {
     if (pool == null || tokenInPool == null || tokenInPool.wrappedNative) {
@@ -141,7 +147,12 @@ const AddToPoolButton = () => {
     );
   }
   return (
-    <Button onClick={tokenInPool?.wrappedNative !== true ? addToPool : addToPoolNative} variant="contained" color={s.state.type === "call" ? "success" : "error"}>
+    <Button
+      disabled={s.state.amount == null || availableBalance < amountScaled}
+      onClick={tokenInPool?.wrappedNative !== true ? addToPool : addToPoolNative}
+      variant="contained"
+      color={s.state.type === "call" ? "success" : "error"}
+    >
       Provide liqudity to {s.state.token} {s.state.type} pool
     </Button>
   );
@@ -159,6 +170,7 @@ const AmountToAddField = () => {
   if (tokenInPool.wrappedNative) {
     availableBalance = s.state.nativeTokenBalance;
   }
+  const amountScaled = ethers.utils.parseUnits(s.state.amount.toString(), tokenInPool.decimals).toBigInt();
 
   return (
     <Stack direction="column" spacing={1}>
@@ -171,6 +183,10 @@ const AmountToAddField = () => {
           onChange={e => {
             const n = parseFloat(e.target.value);
             if (isNaN(n)) {
+              s.update({
+                amount: null,
+                amountString: e.target.value,
+              });
               return;
             }
 
@@ -193,6 +209,7 @@ const AmountToAddField = () => {
               style: { textAlign: "right " },
             } as any
           }
+          error={s.state.amount == null || availableBalance < amountScaled}
         />
         <FormHelperText id="outlined-weight-helper-text">Available balance: {formatPriceWithUnit(availableBalance, tokenInPool, 2)}</FormHelperText>
       </FormControl>
@@ -207,6 +224,7 @@ const Explanation = () => {
     <Typography sx={{ marginBottom: 3 }}>
       You are about to start selling {s.state.token.toUpperCase().slice(1)} {s.state.type.toUpperCase()} options. Please make sure you understand the risks associated with
       liquidity provision before continuing.
+      <a href="https://catpull.gitbook.io/catpull/PC2J9CnV7lqexMtdCp7V/catpull/call-pool">You can find information on AMM options on our gitbook page</a>
     </Typography>
   );
 };

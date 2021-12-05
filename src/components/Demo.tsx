@@ -20,10 +20,10 @@ import { Routes, Route } from "react-router-dom";
 const BackgroundElements = () => {
   return (
     <>
-      <div style={{ position: "absolute", left: 0, top: "50%" }}>
+      <div style={{ position: "absolute", left: 0, transform: "translateY(-50%)", top: "50%" }}>
         <img src={cat} />
       </div>
-      <div style={{ position: "absolute", right: 0, top: "50%" }}>
+      <div style={{ position: "absolute", right: 0, transform: "translateY(-50%)", top: "50%" }}>
         <img src={tiger} />
       </div>
     </>

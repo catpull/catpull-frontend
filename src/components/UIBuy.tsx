@@ -27,6 +27,16 @@ import * as React from "react";
 
 const StrikeField = () => {
   const s = useCurrentState();
+  const price = s.state.assetPrice;
+  let strikeTooLow = false;
+  let strikeTooHigh = false;
+  if (s.state.strike != null && price != null) {
+    const strike = BigInt(s.state.strike);
+    strikeTooLow = strike < price - strike / 5n;
+    strikeTooHigh = strike > price + strike / 5n;
+  }
+  const error = s.state.strike == null || strikeTooLow || strikeTooHigh;
+
   return (
     <FormControl variant="outlined">
       <InputLabel>Strike</InputLabel>
@@ -48,19 +58,27 @@ const StrikeField = () => {
           const v = e.target.value;
           const f = parseFloat(v);
           if (isNaN(f)) {
+            s.update({
+              strike: null,
+              strikeString: v,
+            });
             return;
           }
           const strike = floatToWei(f, { decimals: 8 } as any);
           s.update({
-            strikeString: v,
             strike,
+            strikeString: v,
           });
         }}
+        error={error}
         inputMode="numeric"
       />
-      <FormHelperText>
-        {s.state.assetPrice == null ? "*" : formatTokenAmount(s.state.assetPrice, 8, 2)} MIM / {s.state.token.slice(1).toUpperCase()}
-      </FormHelperText>
+      {!(strikeTooLow || strikeTooHigh) && (
+        <FormHelperText>
+          {s.state.assetPrice == null ? "*" : formatTokenAmount(s.state.assetPrice, 8, 2)} MIM / {s.state.token.slice(1).toUpperCase()}
+        </FormHelperText>
+      )}
+      {(strikeTooLow || strikeTooHigh) && <FormHelperText color="error">Strike must be within 20% of price</FormHelperText>}
     </FormControl>
   );
 };
@@ -215,9 +233,14 @@ const SubmitButton = () => {
       </Button>
     );
   }
-  console.log(strike);
+
   return (
-    <Button disabled={strike == null || availableBalance < premium} onClick={submit} variant="contained" color={s.state.type === "call" ? "success" : "error"}>
+    <Button
+      disabled={tokenInPool.minOptionSize < s.state.amount || s.state.optionPremium == null || strike == null || amount == null || availableBalance < premium}
+      onClick={submit}
+      variant="contained"
+      color={s.state.type === "call" ? "success" : "error"}
+    >
       Create {s.state.type}
     </Button>
   );
@@ -226,6 +249,8 @@ const AmountField = () => {
   const s = useCurrentState();
   const data = useCurrentNetworkData();
   const availableTokens = Object.keys(data.tokens).filter(i => i !== "stable");
+  const tokenInPool = data?.tokens[s.state.token];
+
   return (
     <FormControl variant="outlined">
       <InputLabel>Option size</InputLabel>
@@ -235,7 +260,12 @@ const AmountField = () => {
         value={s.state.amountString}
         onChange={e => {
           const n = parseFloat(e.target.value);
+          console.log(n);
           if (isNaN(n)) {
+            s.update({
+              amountString: e.target.value,
+              amount: null,
+            });
             return;
           }
 
@@ -249,12 +279,14 @@ const AmountField = () => {
             style: { textAlign: "right " },
           } as any
         }
+        error={tokenInPool.minOptionSize > s.state.amount}
         startAdornment={
           <InputAdornment position="start">
             <CurrencySelector value={s.state.token.slice(1)} options={availableTokens.map(e => e.slice(1))} onChange={token => s.update({ token: ("w" + token) as any })} />
           </InputAdornment>
         }
       />
+      <FormHelperText color="error">{tokenInPool.minOptionSize > s.state.amount ? `Minimum size ${tokenInPool.minOptionSize}` : null}</FormHelperText>
     </FormControl>
   );
 };
@@ -302,15 +334,15 @@ const Premium = () => {
     if (ctx.library == null) {
       return;
     }
-    if (amount < 1) {
+    if (!amount) {
       return;
     }
-    if (strike < 1) {
+    if (!strike) {
       return;
     }
 
     const run = async () => {
-      if (tokenInPool == null || running.current || ctx.library == null || facade == null || paymentToken == null) {
+      if (amount == null || tokenInPool == null || running.current || ctx.library == null || facade == null || paymentToken == null) {
         return;
       }
       running.current = true;
@@ -322,7 +354,6 @@ const Premium = () => {
       const path = type === "put" ? [paymentToken.address] : [paymentToken.address, tokenInPool.address];
 
       try {
-        console.log(strike);
         const price = await facadeInst.callStatic.getOptionPrice(pool, expiry * SEC_IN_A_DAY, amount_, strike, path);
         update({
           optionPremium: price.total.toBigInt(),

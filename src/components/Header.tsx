@@ -17,11 +17,17 @@ import { useSnackbar } from "notistack";
 
 const ControlsWrapper = () => {
   const s = useCurrentState();
+  const curNetworkData = useCurrentNetworkData();
   return (
     <Controls
       onUpdate={() => {
+        const minAmount = curNetworkData?.tokens[s.state?.token]?.minOptionSize;
         s.refreshPrice();
         s.refreshBalances();
+        s.update({
+          amount: minAmount,
+          amountString: minAmount.toString(),
+        });
       }}
     />
   );
