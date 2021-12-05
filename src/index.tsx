@@ -4,7 +4,7 @@ import reportWebVitals from "./reportWebVitals";
 import { SnackbarProvider } from "notistack";
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -33,9 +33,9 @@ body, #root {
       }}
       autoHideDuration={10000}
     >
-      <BrowserRouter basename={(config as any).topRoute}>
+      <HashRouter>
         <App />
-      </BrowserRouter>
+      </HashRouter>
     </SnackbarProvider>
   </React.StrictMode>,
   document.getElementById("root"),
