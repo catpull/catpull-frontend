@@ -30,7 +30,7 @@ export function Landing() {
             Next generation peer-to-pool options trading
           </Typography>
           <Typography variant="h6" align="center">
-            Catpull provides the pricing based on market volatility, enabling full peer-to-pool options trading.
+            CATPULL provides the pricing based on market volatility, enabling full peer-to-pool options trading.
           </Typography>
 
           <Stack direction="column" alignItems="center">
