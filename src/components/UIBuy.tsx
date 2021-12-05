@@ -32,8 +32,8 @@ const StrikeField = () => {
   let strikeTooHigh = false;
   if (s.state.strike != null && price != null) {
     const strike = BigInt(s.state.strike);
-    strikeTooLow = strike < price - strike / 5n;
-    strikeTooHigh = strike > price + strike / 5n;
+    strikeTooLow = strike < price - price / 5n;
+    strikeTooHigh = strike > price + price / 5n;
   }
   const error = s.state.strike == null || strikeTooLow || strikeTooHigh;
 
@@ -309,6 +309,7 @@ const ExpirySlider = () => {
         }
         max={30}
       />
+      {s.state.strike !== s.state.assetPrice && <FormHelperText>You can only set an arbitrary expiry for ATM options.</FormHelperText>}
     </Box>
   );
 };

@@ -1,8 +1,7 @@
 /* eslint-disable no-nested-ternary */
-import { useOnTestnet, useCurrentNetworkData, networks } from "../dapp/networks";
+import { useOnTestnet, useCurrentNetworkData } from "../dapp/networks";
 import { Erc20MockFactory, PriceProviderMockFactory, ExerciserV1Factory, ExpirerV1Factory } from "../typechain";
 import { Account } from "./Account";
-import { ChainId } from "./ChainId";
 import { Controls } from "./Controls";
 import { useCurrentState } from "./GlobalState";
 import { Web3Provider } from "@ethersproject/providers";
@@ -10,7 +9,6 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import { useWeb3React } from "@web3-react/core";
 import { utils, BigNumber } from "ethers";
 import { useSnackbar } from "notistack";
@@ -40,8 +38,8 @@ const TestnetControls = () => {
   const ctx = useWeb3React<Web3Provider>();
   const curToken = curNetworkData.tokens[s.state.token];
 
-  const runExcerciser = async (addr: string) => {
-    const expirerV1 = ExerciserV1Factory.connect(addr, await ctx.library.getSigner(ctx.account));
+  const runExcerciser = async (addr: string, factory: typeof ExerciserV1Factory) => {
+    const expirerV1 = factory.connect(addr, await ctx.library.getSigner(ctx.account));
     const pages = (await expirerV1.numberOfPages()).toNumber();
     const options: BigNumber[] = [];
     for (let page = 0; page < pages; page++) {
@@ -92,7 +90,7 @@ const TestnetControls = () => {
         </Button>
         <Button
           onClick={async () => {
-            await runExcerciser(curNetworkData.keepers.excercise);
+            await runExcerciser(curNetworkData.keepers.excercise, ExerciserV1Factory);
           }}
           size="small"
           variant="contained"
@@ -101,7 +99,7 @@ const TestnetControls = () => {
         </Button>
         <Button
           onClick={async () => {
-            await runExcerciser(curNetworkData.keepers.expiration);
+            await runExcerciser(curNetworkData.keepers.expiration, ExpirerV1Factory);
           }}
           size="small"
           variant="contained"

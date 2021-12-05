@@ -14,8 +14,8 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useWeb3React } from "@web3-react/core";
-import * as React from "react";
 import { Routes, Route } from "react-router-dom";
+import { Landing } from "./Landing";
 
 const BackgroundElements = () => {
   return (
@@ -75,7 +75,6 @@ const Navigation = () => {
         <Route path="holdings" element={<UIHoldings />} />
         <Route path="pool" element={<UIPool />} />
         <Route path="liquidity" element={<UILiquidity />} />
-        <Route index element={<UIBuy />} />
       </Routes>
     );
   }
@@ -85,13 +84,21 @@ const Navigation = () => {
 
 export default function Demo() {
   return (
-    <GlobalState>
-      <BackgroundElements />
-      <Header />
+    <Routes>
+      <Route index element={<Landing />} />
+      <Route
+        path="*"
+        element={
+          <GlobalState>
+            <BackgroundElements />
+            <Header />
 
-      <Box sx={{ marginTop: 5 }}>
-        <Navigation />
-      </Box>
-    </GlobalState>
+            <Box sx={{ marginTop: 5 }}>
+              <Navigation />
+            </Box>
+          </GlobalState>
+        }
+      />
+    </Routes>
   );
 }
