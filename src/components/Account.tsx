@@ -21,6 +21,7 @@ export function Account() {
     return (
       <Button
         variant="contained"
+        size="large"
         onClick={async () => {
           activate(injected);
         }}
@@ -33,6 +34,7 @@ export function Account() {
   return (
     <Button
       variant="contained"
+      size="large"
       onClick={async () => {
         if (connected(walletconnect)) {
           (connector as any).close();

@@ -197,11 +197,7 @@ const AmountToAddField = () => {
           }}
           startAdornment={
             <InputAdornment position="start">
-              {isPut ? (
-                <StableCoinSelector />
-              ) : (
-                <CurrencySelector value={s.state.token.slice(1)} options={[tokenInPool.symbol.slice(1)]} onChange={token => s.update({ token: ("w" + token) as any })} />
-              )}
+              {isPut ? <StableCoinSelector /> : <CurrencySelector value={s.state.token.slice(1)} options={[tokenInPool.symbol]} onChange={token => s.update({ token })} />}
             </InputAdornment>
           }
           inputProps={
@@ -224,7 +220,9 @@ const Explanation = () => {
     <Typography sx={{ marginBottom: 3 }}>
       You are about to start selling {s.state.token.toUpperCase().slice(1)} {s.state.type.toUpperCase()} options. Please make sure you understand the risks associated with
       liquidity provision before continuing.
-      <a href="https://catpull.gitbook.io/catpull/PC2J9CnV7lqexMtdCp7V/catpull/call-pool">You can find information on AMM options on our gitbook page</a>
+      <a target="_blank" href="https://catpull.gitbook.io/catpull/PC2J9CnV7lqexMtdCp7V/catpull/call-pool">
+        You can find information on AMM options on our gitbook page
+      </a>
     </Typography>
   );
 };

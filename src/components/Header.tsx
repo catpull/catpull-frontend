@@ -116,12 +116,12 @@ export function Header() {
 
   return (
     <>
-      <Box sx={{ width: "100%", height: 50, position: "relative" }}>
+      <Box sx={{ width: "100%", height: 50, paddingTop: 1, position: "relative" }}>
         <Toolbar variant="dense">
           <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "row" }}></Box>
           <Account />
         </Toolbar>
-        <div style={{ position: "absolute", top: 8, left: "50%", transform: "translateX(-50%)" }}>
+        <div style={{ position: "absolute", top: 18, left: "50%", transform: "translateX(-50%)" }}>
           <ControlsWrapper />
         </div>
       </Box>

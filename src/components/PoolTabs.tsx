@@ -2,8 +2,7 @@ import { useCurrentNetworkData } from "../dapp/networks";
 import { useCurrentState } from "./GlobalState";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import * as React from "react";
-import Icon from "react-crypto-icons";
+import { CryptoIcon } from "./CryptoIcon";
 
 export function PoolTabs() {
   const s = useCurrentState();
@@ -18,7 +17,7 @@ export function PoolTabs() {
             onClick={() => s.update({ token: tok, type: "call" })}
             value={tok + "call"}
             key={tok + "call"}
-            icon={<Icon name={t} size={25} />}
+            icon={<CryptoIcon name={t} size={25} />}
             iconPosition="start"
             label={t.toUpperCase() + " CALL"}
           />,
@@ -26,7 +25,7 @@ export function PoolTabs() {
             onClick={() => s.update({ token: tok, type: "put" })}
             value={tok + "put"}
             key={tok + "put"}
-            icon={<Icon name={t} size={25} />}
+            icon={<CryptoIcon name={t} size={25} />}
             iconPosition="start"
             label={t.toUpperCase() + " PUT"}
           />,

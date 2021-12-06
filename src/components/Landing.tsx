@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import bgimg from "./assets/landingbg.png";
+import bgimg from "./assets/landing.png";
 
 export function Landing() {
   return (
@@ -13,7 +13,7 @@ export function Landing() {
         <Typography>CATPULL</Typography>
         <div style={{ display: "flex", flexGrow: "1" }} />
         <Stack direction="row" spacing={3}>
-          <Button target="_blank" href="https://catpull.gitbook.io/catpull/PC2J9CnV7lqexMtdCp7V/">
+          <Button color="secondary" target="_blank" href="https://catpull.gitbook.io/catpull/PC2J9CnV7lqexMtdCp7V/">
             Documentation
           </Button>
           <Button href="#/buy" size="large" variant="contained" color="primary">
@@ -23,14 +23,11 @@ export function Landing() {
       </Box>
       <Container maxWidth="sm">
         <Stack direction="column" spacing={3}>
-          <div style={{ height: 400, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <img src={bgimg} style={{ maxHeight: 400 }} />
-          </div>
-          <Typography variant="h3" align="center">
-            Next generation peer-to-pool options trading
+          <Typography variant="h2" align="center">
+            CATPULL OPTIONS TRADING
           </Typography>
           <Typography variant="h6" align="center">
-            CATPULL provides the pricing based on market volatility, enabling full peer-to-pool options trading.
+            Next generation peer-to-pool options trading on Avalanche.
           </Typography>
 
           <Stack direction="column" alignItems="center">
@@ -38,6 +35,9 @@ export function Landing() {
               Enter app
             </Button>
           </Stack>
+          <div style={{ height: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <img src={bgimg} style={{ maxHeight: 800 }} />
+          </div>
         </Stack>
       </Container>
     </>

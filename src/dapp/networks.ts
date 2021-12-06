@@ -69,43 +69,42 @@ const toLookup = (toks: any): Record<string, CoinType> => {
   })
   return out
 }
-
-const TESTNET_STABLE = mkCoin("0xc7F3c725b15C3def0392F1F7A8bfb74966B2C3E4", "mim", 6, 0, 50000);
+const TESTNET_STABLE = mkCoin("0x61Bd2F9df56528749091119101A6ab7476214359", "mim", 6, 0, 50000);
 const TESTNET_TOKENS = {
-  wavax: mkCoin("0xff95bcF1B171785708B67EbdfB38AfabD5D4DED0", "wavax", 18, 10, 50, true),
-  wbtc: mkCoin("0xD95E1B886A8b2d8f0BAD272a809C15625d6b04BF", "wbtc", 8, 0.1, 1),
-  // weth: mkCoin("0x05917dbA34653d1b4336d31d75397169EC06e725", "weth", 18, 1, 10),
+  wavax: mkCoin("0xE360C90E03982944208fB3c0027661040961064E", "wavax", 18, 10, 50, true),
+  wbtc: mkCoin("0x6f7aC9E0cbE2cA9780aDAf84e817e3BE010FfE59", "wbtc", 8, 0.1, 1),
+  weth: mkCoin("0x53d33c6DcfaEaafD6B78BE68DBC2D8eedd344a31", "weth", 18, 1, 10),
   stable: TESTNET_STABLE,
 } as Record<string, CoinType>
 
 const TESTNET = {
   priceOracles: {
-    wbtc: "0x1480Fc83EB3872c97ea244CFa9218A95A37e035e",
-    weth: "0xdB1C18136963b37A214EFd9588549712287D8dd8",
-    wavax: "0x129d689096F3E0a97a050FEd56D0e6B988A99fB7",
+    wbtc: "0xDc0BA47763045E6FD69Dd712Ca29BeeD7Aa1320d",
+    // weth: "0x7b8ed2BA15a438a927A20c34dA0A998C4a7f0ce3",
+    wavax: "0x00f61b820E96f118939a38Bd081A8D2bD6c804a3",
   } as Record<string, string>,
   tokens: TESTNET_TOKENS,
   tokensLookup: toLookup(TESTNET_TOKENS),
   stable: TESTNET_STABLE,
-  facade: "0x6682526Cae58595ed9857a6231f99fddFAF46055",
-  uiProvider: "0xF63bea0BbAAb0808DC9f7B36976f38821B0DB69F",
+  facade: "0xCb99F5e3F7513BC5418152B190852BB3B267e0D2",
+  uiProvider: "0x7F1ab76A3F644c5369D2a55E9cB9D762A6CB547d",
   pools: {
     wavax: {
-      call: "0xD3fc4f41D3224D4db3228abB0E248487D0d6574F",
-      put: "0xD7d0d54fe0D0FfA03cCB788eE4aC08CaBA03aC15",
+      call: "0x4420c07a858d5d1eAcEef3E58eDCaE26E5746f12",
+      put: "0x68690Be96174c9FB0C4366Bf71f745f43Cf964F5",
     },
     wbtc: {
-      call: "0x815DFe5a14277dbD1f7ED871365830dF5CDa7E1E",
-      put: "0xAc9533855ccdca9eE072d0dC96C23a1337f0d018",
+      call: "0x27B56ce12206f5325Bf6Be1AF7152B0DF1b490a9",
+      put: "0x428e083Ad5B621ec7Ea8867D9bea7A0c66425770",
     },
     weth: {
-      call: "0x2cC63E9FAc1f832617C9a816272FC05C5B046639",
-      put: "0xdf3088ae869a36263113dc6901FbB3CcFDb99A31",
+      call: "0xec473f84549605548dd7258804424c73Fca223cA",
+      put: "0xC194Cbef1281843d8920Bd7B7d8646CE1043f948",
     },
   },
   keepers: {
-    expiration: "0xb711e43e3349c64bcAcDf7dbfd8d4A6919901F52",
-    excercise: "0x36cc356128A08c755b14d3F0C532AA7838C73f44",
+    expiration: "0xd86CF87E80C7092f25dFcA31cB56b0cb594fDB99",
+    excercise: "0xaf72D9a3D7e79438CF65c9514941158320B76Cb0",
   }
 };
 const STABLE = mkCoin("0x130966628846BFd36ff31a822705796e8cb8C18D", "mim", 16, 0);

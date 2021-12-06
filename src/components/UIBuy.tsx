@@ -260,7 +260,6 @@ const AmountField = () => {
         value={s.state.amountString}
         onChange={e => {
           const n = parseFloat(e.target.value);
-          console.log(n);
           if (isNaN(n)) {
             s.update({
               amountString: e.target.value,
@@ -282,7 +281,7 @@ const AmountField = () => {
         error={tokenInPool.minOptionSize > s.state.amount}
         startAdornment={
           <InputAdornment position="start">
-            <CurrencySelector value={s.state.token.slice(1)} options={availableTokens.map(e => e.slice(1))} onChange={token => s.update({ token: ("w" + token) as any })} />
+            <CurrencySelector value={s.state.token.slice(1)} options={availableTokens} onChange={token => s.update({ token: token })} />
           </InputAdornment>
         }
       />
