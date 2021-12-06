@@ -38,7 +38,7 @@ const AddToPoolButton = () => {
   if (tokenInPool.wrappedNative) {
     availableBalance = s.state.nativeTokenBalance;
   }
-  const amountScaled = ethers.utils.parseUnits(s.state.amount.toString(), tokenInPool.decimals).toBigInt();
+  const amountScaled = ethers.utils.parseUnits(s.state.amount?.toString() ?? "0", tokenInPool.decimals).toBigInt();
 
   React.useEffect(() => {
     if (pool == null || tokenInPool == null || tokenInPool.wrappedNative) {
@@ -47,7 +47,7 @@ const AddToPoolButton = () => {
     const run = async () => {
       const signer = await ctx.library.getSigner();
       const erc20Inst = Erc20Factory.connect(tokenInPool.address, signer);
-      const currentAllowance = await erc20Inst.allowance(await signer.getAddress(), pool);
+      const currentAllowance = await erc20Inst.allowance(ctx.account, pool);
       if (currentAllowance.lt("11579208923731619542357098500868790785326998466564056403945758400791312963")) {
         setIsApproved(false);
       } else {
@@ -170,7 +170,7 @@ const AmountToAddField = () => {
   if (tokenInPool.wrappedNative) {
     availableBalance = s.state.nativeTokenBalance;
   }
-  const amountScaled = ethers.utils.parseUnits(s.state.amount.toString(), tokenInPool.decimals).toBigInt();
+  const amountScaled = ethers.utils.parseUnits(s.state.amount?.toString() ?? "0", tokenInPool.decimals).toBigInt();
 
   return (
     <Stack direction="column" spacing={1}>
