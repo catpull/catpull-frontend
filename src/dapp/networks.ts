@@ -73,7 +73,7 @@ const TESTNET_STABLE = mkCoin("0x61Bd2F9df56528749091119101A6ab7476214359", "mim
 const TESTNET_TOKENS = {
   wavax: mkCoin("0xE360C90E03982944208fB3c0027661040961064E", "wavax", 18, 10, 50, true),
   wbtc: mkCoin("0x6f7aC9E0cbE2cA9780aDAf84e817e3BE010FfE59", "wbtc", 8, 0.1, 1),
-  weth: mkCoin("0x53d33c6DcfaEaafD6B78BE68DBC2D8eedd344a31", "weth", 18, 1, 10),
+  // weth: mkCoin("0x53d33c6DcfaEaafD6B78BE68DBC2D8eedd344a31", "weth", 18, 1, 10),
   stable: TESTNET_STABLE,
 } as Record<string, CoinType>
 
