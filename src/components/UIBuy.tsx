@@ -236,7 +236,7 @@ const SubmitButton = () => {
 
   return (
     <Button
-      disabled={tokenInPool.minOptionSize < s.state.amount || s.state.optionPremium == null || strike == null || amount == null || availableBalance < premium}
+      disabled={tokenInPool.minOptionSize > s.state.amount || s.state.optionPremium == null || strike == null || amount == null || availableBalance < premium}
       onClick={submit}
       variant="contained"
       color={s.state.type === "call" ? "success" : "error"}
