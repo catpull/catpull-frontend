@@ -121,7 +121,7 @@ export function Header() {
           <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "row" }}></Box>
           <Account />
         </Toolbar>
-        <div style={{ position: "absolute", top: 18, left: "50%", transform: "translateX(-50%)" }}>
+        <div style={{ position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)" }}>
           <ControlsWrapper />
         </div>
       </Box>
