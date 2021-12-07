@@ -21,10 +21,10 @@ const BackgroundElements = () => {
   return (
     <>
       <div style={{ position: "absolute", left: 0, zIndex: 0, transform: "translateY(-50%)", top: "50%" }}>
-        <img src={cat} style={{ maxHeight: "300px" }} />
+        <img src={cat} style={{ maxHeight: "50vh", maxWidth: "25wh" }} />
       </div>
       <div style={{ position: "absolute", right: 0, zIndex: 0, transform: "translateY(-50%)", top: "50%" }}>
-        <img src={tiger} style={{ maxHeight: "450px" }} />
+        <img src={tiger} style={{ maxHeight: "50vh", maxWidth: "25wh" }} />
       </div>
     </>
   );
