@@ -10,7 +10,7 @@ export function Landing() {
   return (
     <>
       <Box sx={{ width: "100%", paddingTop: 1, display: "flex", paddingRight: 3, paddingLeft: 3, flexDirection: "row", height: 50, position: "relative" }}>
-        <Typography>CATPULL</Typography>
+        <Typography variant="h4">(🐱,🐯)</Typography>
         <div style={{ display: "flex", flexGrow: "1" }} />
         <Stack direction="row" spacing={3}>
           <Button color="secondary" target="_blank" href="https://catpull.gitbook.io/catpull/PC2J9CnV7lqexMtdCp7V/">
@@ -24,10 +24,18 @@ export function Landing() {
       <Container maxWidth="sm">
         <Stack direction="column" spacing={3}>
           <Typography variant="h2" align="center">
-            CATPULL OPTIONS TRADING
+            <strong>
+              <span style={{ color: "rgb(225, 148, 55)" }}>CA</span>
+              <span style={{ color: "rgb(75, 48, 25)" }}>TPU</span>
+              <span style={{ color: "rgb(225, 148, 55)" }}>LL</span>
+            </strong>{" "}
+            OPTIONS TRADING
           </Typography>
           <Typography variant="h6" align="center">
-            Next generation peer-to-pool options trading on Avalanche.
+            Next generation peer-to-pool options trading on{" "}
+            <strong>
+              <span style={{ color: "rgb(225, 63, 65)" }}>Avalanche</span>
+            </strong>
           </Typography>
 
           <Stack direction="column" alignItems="center">
