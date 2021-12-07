@@ -24,12 +24,7 @@ export function Landing() {
       <Container maxWidth="sm">
         <Stack direction="column" spacing={3}>
           <Typography variant="h2" align="center">
-            <strong>
-              <span style={{ color: "rgb(225, 148, 55)" }}>CA</span>
-              <span style={{ color: "rgb(75, 48, 25)" }}>TPU</span>
-              <span style={{ color: "rgb(225, 148, 55)" }}>LL</span>
-            </strong>{" "}
-            OPTIONS TRADING
+            <strong>CATPULL</strong> OPTIONS TRADING
           </Typography>
           <Typography variant="h6" align="center">
             Next generation peer-to-pool options trading on{" "}

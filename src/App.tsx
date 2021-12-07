@@ -14,7 +14,7 @@ export function App() {
       createTheme({
         palette: {
           primary: {
-            main: "#888",
+            main: "#777",
           },
           secondary: {
             main: "#333",
