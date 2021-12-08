@@ -48,18 +48,6 @@ const SwitchToDevNet = () => {
   );
 };
 
-const NoPoolsFoundForThisNetwork = () => {
-  return (
-    <Container sx={{ paddingTop: 2 }} maxWidth="sm">
-      <Paper sx={{ padding: 3 }}>
-        <Stack direction="column" spacing={3}>
-          <Typography>Sorry, this dappp only works on</Typography>
-        </Stack>
-      </Paper>
-    </Container>
-  );
-};
-
 const Navigation = () => {
   const ctx = useWeb3React<Web3Provider>();
   console.log(ctx.chainId);
@@ -79,7 +67,7 @@ const Navigation = () => {
     );
   }
 
-  return <NoPoolsFoundForThisNetwork />;
+  return <SwitchToDevNet />;
 };
 
 export default function Demo() {
