@@ -84,66 +84,74 @@ export const UIHoldings = () => {
                 <TableCell align="right">Asset</TableCell>
                 <TableCell align="right">Strike</TableCell>
                 <TableCell align="right">Size</TableCell>
-                <TableCell align="right">PNL</TableCell>
+                <TableCell align="right">Option value</TableCell>
+                <TableCell align="right">Premium</TableCell>
                 <TableCell align="right">Expiry</TableCell>
                 <TableCell align="right">State</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row, i) => (
-                <TableRow key={i} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                  <TableCell align="right">{row.isCall ? <Chip label="CALL" color="success" size="small" /> : <Chip label="PUT" color="error" size="small" />}</TableCell>
+              {rows.map((row, i) => {
+                const cannotBeExercised = row.value.isZero();
+                return (
+                  <TableRow key={i} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    <TableCell align="right">{row.isCall ? <Chip label="CALL" color="success" size="small" /> : <Chip label="PUT" color="error" size="small" />}</TableCell>
 
-                  <TableCell align="right">{networkData.tokensLookup[row.asset].symbol.toUpperCase()}</TableCell>
-                  <TableCell align="right">{formatTokenAmount(row.strike.toBigInt(), 8, 2)}</TableCell>
-                  <TableCell align="right">{formatTokenAmount(row.amount.toBigInt(), networkData.tokensLookup[row.asset].decimals, 2)}</TableCell>
-                  <TableCell align="right">{formatTokenAmount(row.pnl.toBigInt(), 18, 2)}</TableCell>
-                  <TableCell align="right">{row.state === 1 ? ((row.expiry.toNumber() * 1000 - Date.now()) / (1000 * 60 * 60 * 24)).toFixed(2) + " days" : "-"}</TableCell>
-                  <TableCell align="right">
-                    {row.state === 0 ? (
-                      <Chip size="small" label="Unknown" color="error" />
-                    ) : row.state === 1 ? (
-                      <Button
-                        size="small"
-                        onClick={async () => {
-                          setExercising(true);
-                          if (ctx.library == null || ctx.account == null) {
-                            return;
-                          }
-                          try {
-                            const signer = await ctx.library.getSigner(ctx.account);
-                            const facadeInst = FacadeFactory.connect(networkData.facade, signer);
-
-                            const optionsManagerInst = OptionsManagerFactory.connect(await facadeInst.optionsManager(), signer);
-
-                            const optId = row.optionId.toNumber();
-                            const poolAddr = await optionsManagerInst.tokenPool(optId);
-                            const poolInst = HegicPutFactory.connect(poolAddr, signer);
-                            const r = await poolInst.exercise(optId);
-                            notistack.enqueueSnackbar("Exercising option");
-                            await r.wait(1);
-                            notistack.enqueueSnackbar("Option excersiced");
-                            await fetchState();
-                            s.refreshBalances();
+                    <TableCell align="right">{networkData.tokensLookup[row.asset].symbol.toUpperCase()}</TableCell>
+                    <TableCell align="right">{formatTokenAmount(row.strike.toBigInt(), 8, 2)}</TableCell>
+                    <TableCell align="right">{formatTokenAmount(row.amount.toBigInt(), networkData.tokensLookup[row.asset].decimals, 2)}</TableCell>
+                    <TableCell align="right">{formatTokenAmount(row.value.toBigInt(), 8, 2)}</TableCell>
+                    <TableCell align="right">{formatTokenAmount(row.premium.toBigInt(), 8, 2)}</TableCell>
+                    <TableCell align="right">{row.state === 1 ? ((row.expiry.toNumber() * 1000 - Date.now()) / (1000 * 60 * 60 * 24)).toFixed(2) + " days" : "-"}</TableCell>
+                    <TableCell align="right">
+                      {cannotBeExercised ? (
+                        <Chip size="small" label="OTM" />
+                      ) : row.state === 0 ? (
+                        <Chip size="small" label="Unknown" color="error" />
+                      ) : row.state === 1 ? (
+                        <Button
+                          size="small"
+                          onClick={async () => {
                             setExercising(true);
-                          } catch (e) {
-                            notistack.enqueueSnackbar("Failed to excercise option");
-                          } finally {
-                            setExercising(false);
-                          }
-                        }}
-                        disabled={exercising || row.pnl.isNegative() || Date.now() > row.expiry.toNumber() * 1000}
-                      >
-                        Excerise
-                      </Button>
-                    ) : row.state === 2 ? (
-                      <Chip size="small" label="Exercised" color="success" />
-                    ) : (
-                      <Chip size="small" label="Expired" />
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
+                            if (ctx.library == null || ctx.account == null) {
+                              return;
+                            }
+                            try {
+                              const signer = await ctx.library.getSigner(ctx.account);
+                              const facadeInst = FacadeFactory.connect(networkData.facade, signer);
+
+                              const optionsManagerInst = OptionsManagerFactory.connect(await facadeInst.optionsManager(), signer);
+
+                              const optId = row.optionId.toNumber();
+                              const poolAddr = await optionsManagerInst.tokenPool(optId);
+                              const poolInst = HegicPutFactory.connect(poolAddr, signer);
+                              const r = await poolInst.exercise(optId);
+                              notistack.enqueueSnackbar("Exercising option");
+                              await r.wait(1);
+                              notistack.enqueueSnackbar("Option excersiced");
+                              await fetchState();
+                              s.refreshBalances();
+                              setExercising(true);
+                            } catch (e) {
+                              notistack.enqueueSnackbar("Failed to excercise option");
+                            } finally {
+                              setExercising(false);
+                            }
+                          }}
+                          variant={cannotBeExercised ? "text" : "contained"}
+                          disabled={exercising || cannotBeExercised || Date.now() > row.expiry.toNumber() * 1000}
+                        >
+                          {cannotBeExercised ? "OTM" : "Exercise"}
+                        </Button>
+                      ) : row.state === 2 ? (
+                        <Chip size="small" label="Exercised" color="success" />
+                      ) : (
+                        <Chip size="small" label="Expired" />
+                      )}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
           {rows.length !== 0 && (

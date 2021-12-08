@@ -28,17 +28,17 @@ interface PriceCalculatorInterface extends ethers.utils.Interface {
     "impliedVolRate()": FunctionFragment;
     "model()": FunctionFragment;
     "owner()": FunctionFragment;
+    "params()": FunctionFragment;
     "pool()": FunctionFragment;
     "priceProvider()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "riskFreeRate()": FunctionFragment;
     "setDaoShare(uint256)": FunctionFragment;
     "setImpliedVolRate(int256)": FunctionFragment;
+    "setRiskFreeRate(int256)": FunctionFragment;
     "setSwingRate(int256)": FunctionFragment;
-    "setUtilizationRate(uint256)": FunctionFragment;
     "swingRate()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "utilizationRate()": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -56,6 +56,7 @@ interface PriceCalculatorInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "model", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(functionFragment: "params", values?: undefined): string;
   encodeFunctionData(functionFragment: "pool", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "priceProvider",
@@ -78,21 +79,17 @@ interface PriceCalculatorInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "setSwingRate",
+    functionFragment: "setRiskFreeRate",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "setUtilizationRate",
+    functionFragment: "setSwingRate",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "swingRate", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "utilizationRate",
-    values?: undefined
   ): string;
 
   decodeFunctionResult(
@@ -110,6 +107,7 @@ interface PriceCalculatorInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "model", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "params", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pool", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "priceProvider",
@@ -132,20 +130,16 @@ interface PriceCalculatorInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setSwingRate",
+    functionFragment: "setRiskFreeRate",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setUtilizationRate",
+    functionFragment: "setSwingRate",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "swingRate", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "utilizationRate",
     data: BytesLike
   ): Result;
 
@@ -155,7 +149,6 @@ interface PriceCalculatorInterface extends ethers.utils.Interface {
     "OwnershipTransferred(address,address)": EventFragment;
     "RiskFreeRateChanged(int256)": EventFragment;
     "SwingRateChanged(int256)": EventFragment;
-    "UtilizationRateChangeChanged(uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "DaoShareChanged"): EventFragment;
@@ -163,9 +156,6 @@ interface PriceCalculatorInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RiskFreeRateChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SwingRateChanged"): EventFragment;
-  getEvent(
-    nameOrSignatureOrTopic: "UtilizationRateChangeChanged"
-  ): EventFragment;
 }
 
 export class PriceCalculator extends Contract {
@@ -268,6 +258,20 @@ export class PriceCalculator extends Contract {
       0: string;
     }>;
 
+    params(overrides?: CallOverrides): Promise<{
+      0: BigNumber;
+      1: BigNumber;
+      2: BigNumber;
+      3: BigNumber;
+    }>;
+
+    "params()"(overrides?: CallOverrides): Promise<{
+      0: BigNumber;
+      1: BigNumber;
+      2: BigNumber;
+      3: BigNumber;
+    }>;
+
     pool(overrides?: CallOverrides): Promise<{
       0: string;
     }>;
@@ -316,22 +320,22 @@ export class PriceCalculator extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
+    setRiskFreeRate(
+      value: BigNumberish,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "setRiskFreeRate(int256)"(
+      value: BigNumberish,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
     setSwingRate(
       value: BigNumberish,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
     "setSwingRate(int256)"(
-      value: BigNumberish,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    setUtilizationRate(
-      value: BigNumberish,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    "setUtilizationRate(uint256)"(
       value: BigNumberish,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
@@ -353,14 +357,6 @@ export class PriceCalculator extends Contract {
       newOwner: string,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
-
-    utilizationRate(overrides?: CallOverrides): Promise<{
-      0: BigNumber;
-    }>;
-
-    "utilizationRate()"(overrides?: CallOverrides): Promise<{
-      0: BigNumber;
-    }>;
   };
 
   _calculatePrice(
@@ -433,6 +429,20 @@ export class PriceCalculator extends Contract {
 
   "owner()"(overrides?: CallOverrides): Promise<string>;
 
+  params(overrides?: CallOverrides): Promise<{
+    0: BigNumber;
+    1: BigNumber;
+    2: BigNumber;
+    3: BigNumber;
+  }>;
+
+  "params()"(overrides?: CallOverrides): Promise<{
+    0: BigNumber;
+    1: BigNumber;
+    2: BigNumber;
+    3: BigNumber;
+  }>;
+
   pool(overrides?: CallOverrides): Promise<string>;
 
   "pool()"(overrides?: CallOverrides): Promise<string>;
@@ -469,22 +479,22 @@ export class PriceCalculator extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
+  setRiskFreeRate(
+    value: BigNumberish,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "setRiskFreeRate(int256)"(
+    value: BigNumberish,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
   setSwingRate(
     value: BigNumberish,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
   "setSwingRate(int256)"(
-    value: BigNumberish,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  setUtilizationRate(
-    value: BigNumberish,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  "setUtilizationRate(uint256)"(
     value: BigNumberish,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
@@ -502,10 +512,6 @@ export class PriceCalculator extends Contract {
     newOwner: string,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
-
-  utilizationRate(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "utilizationRate()"(overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
     _calculatePrice(
@@ -578,6 +584,20 @@ export class PriceCalculator extends Contract {
 
     "owner()"(overrides?: CallOverrides): Promise<string>;
 
+    params(overrides?: CallOverrides): Promise<{
+      0: BigNumber;
+      1: BigNumber;
+      2: BigNumber;
+      3: BigNumber;
+    }>;
+
+    "params()"(overrides?: CallOverrides): Promise<{
+      0: BigNumber;
+      1: BigNumber;
+      2: BigNumber;
+      3: BigNumber;
+    }>;
+
     pool(overrides?: CallOverrides): Promise<string>;
 
     "pool()"(overrides?: CallOverrides): Promise<string>;
@@ -611,19 +631,19 @@ export class PriceCalculator extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setRiskFreeRate(
+      value: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "setRiskFreeRate(int256)"(
+      value: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setSwingRate(value: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     "setSwingRate(int256)"(
-      value: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setUtilizationRate(
-      value: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "setUtilizationRate(uint256)"(
       value: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -641,10 +661,6 @@ export class PriceCalculator extends Contract {
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    utilizationRate(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "utilizationRate()"(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   filters: {
@@ -660,8 +676,6 @@ export class PriceCalculator extends Contract {
     RiskFreeRateChanged(undefined: null): EventFilter;
 
     SwingRateChanged(undefined: null): EventFilter;
-
-    UtilizationRateChangeChanged(undefined: null): EventFilter;
   };
 
   estimateGas: {
@@ -715,6 +729,10 @@ export class PriceCalculator extends Contract {
 
     "owner()"(overrides?: CallOverrides): Promise<BigNumber>;
 
+    params(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "params()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     pool(overrides?: CallOverrides): Promise<BigNumber>;
 
     "pool()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -748,22 +766,22 @@ export class PriceCalculator extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
+    setRiskFreeRate(
+      value: BigNumberish,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "setRiskFreeRate(int256)"(
+      value: BigNumberish,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
     setSwingRate(
       value: BigNumberish,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
     "setSwingRate(int256)"(
-      value: BigNumberish,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    setUtilizationRate(
-      value: BigNumberish,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    "setUtilizationRate(uint256)"(
       value: BigNumberish,
       overrides?: Overrides
     ): Promise<BigNumber>;
@@ -781,10 +799,6 @@ export class PriceCalculator extends Contract {
       newOwner: string,
       overrides?: Overrides
     ): Promise<BigNumber>;
-
-    utilizationRate(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "utilizationRate()"(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -840,6 +854,10 @@ export class PriceCalculator extends Contract {
 
     "owner()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    params(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "params()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     pool(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "pool()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -876,22 +894,22 @@ export class PriceCalculator extends Contract {
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
+    setRiskFreeRate(
+      value: BigNumberish,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "setRiskFreeRate(int256)"(
+      value: BigNumberish,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
     setSwingRate(
       value: BigNumberish,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
     "setSwingRate(int256)"(
-      value: BigNumberish,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    setUtilizationRate(
-      value: BigNumberish,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    "setUtilizationRate(uint256)"(
       value: BigNumberish,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
@@ -908,12 +926,6 @@ export class PriceCalculator extends Contract {
     "transferOwnership(address)"(
       newOwner: string,
       overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    utilizationRate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "utilizationRate()"(
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

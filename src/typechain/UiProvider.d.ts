@@ -123,7 +123,7 @@ export class UiProvider extends Contract {
           amount: BigNumber;
           expiry: BigNumber;
           premium: BigNumber;
-          pnl: BigNumber;
+          value: BigNumber;
           0: boolean;
           1: number;
           2: BigNumber;
@@ -145,7 +145,7 @@ export class UiProvider extends Contract {
           amount: BigNumber;
           expiry: BigNumber;
           premium: BigNumber;
-          pnl: BigNumber;
+          value: BigNumber;
           0: boolean;
           1: number;
           2: BigNumber;
@@ -169,7 +169,7 @@ export class UiProvider extends Contract {
           amount: BigNumber;
           expiry: BigNumber;
           premium: BigNumber;
-          pnl: BigNumber;
+          value: BigNumber;
           0: boolean;
           1: number;
           2: BigNumber;
@@ -191,7 +191,7 @@ export class UiProvider extends Contract {
           amount: BigNumber;
           expiry: BigNumber;
           premium: BigNumber;
-          pnl: BigNumber;
+          value: BigNumber;
           0: boolean;
           1: number;
           2: BigNumber;
@@ -222,7 +222,7 @@ export class UiProvider extends Contract {
           amount: BigNumber;
           expiry: BigNumber;
           premium: BigNumber;
-          pnl: BigNumber;
+          value: BigNumber;
           0: boolean;
           1: number;
           2: BigNumber;
@@ -244,7 +244,7 @@ export class UiProvider extends Contract {
           amount: BigNumber;
           expiry: BigNumber;
           premium: BigNumber;
-          pnl: BigNumber;
+          value: BigNumber;
           0: boolean;
           1: number;
           2: BigNumber;
@@ -268,7 +268,7 @@ export class UiProvider extends Contract {
           amount: BigNumber;
           expiry: BigNumber;
           premium: BigNumber;
-          pnl: BigNumber;
+          value: BigNumber;
           0: boolean;
           1: number;
           2: BigNumber;
@@ -290,7 +290,7 @@ export class UiProvider extends Contract {
           amount: BigNumber;
           expiry: BigNumber;
           premium: BigNumber;
-          pnl: BigNumber;
+          value: BigNumber;
           0: boolean;
           1: number;
           2: BigNumber;
@@ -511,7 +511,7 @@ export class UiProvider extends Contract {
       amount: BigNumber;
       expiry: BigNumber;
       premium: BigNumber;
-      pnl: BigNumber;
+      value: BigNumber;
       0: boolean;
       1: number;
       2: BigNumber;
@@ -533,7 +533,7 @@ export class UiProvider extends Contract {
       amount: BigNumber;
       expiry: BigNumber;
       premium: BigNumber;
-      pnl: BigNumber;
+      value: BigNumber;
       0: boolean;
       1: number;
       2: BigNumber;
@@ -562,7 +562,7 @@ export class UiProvider extends Contract {
       amount: BigNumber;
       expiry: BigNumber;
       premium: BigNumber;
-      pnl: BigNumber;
+      value: BigNumber;
       0: boolean;
       1: number;
       2: BigNumber;
@@ -584,7 +584,7 @@ export class UiProvider extends Contract {
       amount: BigNumber;
       expiry: BigNumber;
       premium: BigNumber;
-      pnl: BigNumber;
+      value: BigNumber;
       0: boolean;
       1: number;
       2: BigNumber;
@@ -724,7 +724,7 @@ export class UiProvider extends Contract {
         amount: BigNumber;
         expiry: BigNumber;
         premium: BigNumber;
-        pnl: BigNumber;
+        value: BigNumber;
         0: boolean;
         1: number;
         2: BigNumber;
@@ -746,7 +746,7 @@ export class UiProvider extends Contract {
         amount: BigNumber;
         expiry: BigNumber;
         premium: BigNumber;
-        pnl: BigNumber;
+        value: BigNumber;
         0: boolean;
         1: number;
         2: BigNumber;
@@ -775,7 +775,7 @@ export class UiProvider extends Contract {
         amount: BigNumber;
         expiry: BigNumber;
         premium: BigNumber;
-        pnl: BigNumber;
+        value: BigNumber;
         0: boolean;
         1: number;
         2: BigNumber;
@@ -797,7 +797,7 @@ export class UiProvider extends Contract {
         amount: BigNumber;
         expiry: BigNumber;
         premium: BigNumber;
-        pnl: BigNumber;
+        value: BigNumber;
         0: boolean;
         1: number;
         2: BigNumber;

@@ -87,7 +87,7 @@ const TESTNET = {
   tokensLookup: toLookup(TESTNET_TOKENS),
   stable: TESTNET_STABLE,
   facade: "0xCb99F5e3F7513BC5418152B190852BB3B267e0D2",
-  uiProvider: "0x7F1ab76A3F644c5369D2a55E9cB9D762A6CB547d",
+  uiProvider: "0xc897008A40f30A82179e4C9f8b3880d0425e89aD",
   pools: {
     wavax: {
       call: "0x4420c07a858d5d1eAcEef3E58eDCaE26E5746f12",
