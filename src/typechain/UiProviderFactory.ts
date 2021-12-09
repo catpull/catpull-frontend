@@ -171,6 +171,11 @@ const _abi = [
                 name: "value",
                 type: "uint256",
               },
+              {
+                internalType: "uint256",
+                name: "tokens",
+                type: "uint256",
+              },
             ],
             internalType: "struct OptionViewData[]",
             name: "optionPageEntries",

@@ -93,13 +93,14 @@ export const UIHoldings = () => {
             <TableBody>
               {rows.map((row, i) => {
                 const cannotBeExercised = row.value.isZero();
+                const asset = networkData.tokensLookup[row.asset]
                 return (
                   <TableRow key={i} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell align="right">{row.isCall ? <Chip label="CALL" color="success" size="small" /> : <Chip label="PUT" color="error" size="small" />}</TableCell>
 
-                    <TableCell align="right">{networkData.tokensLookup[row.asset].symbol.toUpperCase()}</TableCell>
+                    <TableCell align="right">{asset?.symbol.toUpperCase()??row.asset}</TableCell>
                     <TableCell align="right">{formatTokenAmount(row.strike.toBigInt(), 8, 2)}</TableCell>
-                    <TableCell align="right">{formatTokenAmount(row.amount.toBigInt(), networkData.tokensLookup[row.asset].decimals, 2)}</TableCell>
+                    <TableCell align="right">{formatTokenAmount(row.amount.toBigInt(), asset?.decimals??8, 2)}</TableCell>
                     <TableCell align="right">{formatTokenAmount(row.value.toBigInt(), 8, 2)}</TableCell>
                     <TableCell align="right">{formatTokenAmount(row.premium.toBigInt(), 8, 2)}</TableCell>
                     <TableCell align="right">{row.state === 1 ? ((row.expiry.toNumber() * 1000 - Date.now()) / (1000 * 60 * 60 * 24)).toFixed(2) + " days" : "-"}</TableCell>

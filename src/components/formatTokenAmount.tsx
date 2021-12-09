@@ -7,7 +7,6 @@ for (let i = 0; i < 20; i++) {
   out = out * 10n;
 }
 export function formatTokenAmount(amount: bigint, decimals: number, outDigits: number = 2) {
-  console.log(amount, decimals, outDigits);
   if (decimals > outDigits) {
     amount = BigInt(amount) / BigInt(sizes[decimals - outDigits]);
   }
